@@ -9,12 +9,14 @@ namespace MathGame;
 internal class Game
 {
     public String Mode { get; set; }
+    public String Operation { get; set; }
     public int Correct { get; set; } = 0;
+    public int NumberOfQuestions { get; set; } = 0;
     public double Percentage
     {
         get
         {
-            return Correct / 10.0 * 100;
+            return Correct / (double)NumberOfQuestions * 100;
         }
     }
 
@@ -25,34 +27,59 @@ internal class Game
 
     internal bool RunGame()
     {
-        bool exit = false;
         switch (Mode)
         {
             case "1":
-                RunAddition();
-                break;
+                GetNumberOfQuestions();
+                RunAddition(NumberOfQuestions);
+                Operation = "Addition";
+                DisplayResults();
+                return false;
             case "2":
-                RunSubtraction();
-                break;
+                GetNumberOfQuestions();
+                RunSubtraction(NumberOfQuestions);
+                Operation = "Subtraction";
+                DisplayResults();
+                return false;
             case "3":
-                RunMultiplication();
-                break;
+                GetNumberOfQuestions();
+                RunMultiplication(NumberOfQuestions);
+                Operation = "Multiplication";
+                DisplayResults();
+                return false;
             case "4":
-                RunDivision();
-                break;
+                GetNumberOfQuestions();
+                RunDivision(NumberOfQuestions);
+                Operation = "Division";
+                DisplayResults();
+                return false;
+            case "5":
+                GetNumberOfQuestions();
+                RunRandom(NumberOfQuestions);
+                Operation = "All";
+                DisplayResults();
+                return false;
             default:
-                exit = true;
-                break; ;
+                return true;
         }
 
-        DisplayResults();
-        return exit;
     }
 
-    private void RunAddition()
+    private void GetNumberOfQuestions()
+    {
+        string numberOfQuestions = "";
+        while (numberOfQuestions.Equals("") || !int.TryParse(numberOfQuestions, out int result))
+        {
+            Console.WriteLine("How many questions? ");
+            numberOfQuestions = Console.ReadLine()!;
+        }
+        NumberOfQuestions = int.Parse(numberOfQuestions);
+    }
+
+    private void RunAddition(int reps)
     {
         Random rand = new();
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < reps; i++)
         {
             int a = rand.Next(0, 101);
             int b = rand.Next(0, 101);
@@ -66,10 +93,10 @@ internal class Game
         }
     }
 
-    private void RunSubtraction()
+    private void RunSubtraction(int reps)
     {
         Random rand = new();
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < reps; i++)
         {
             int a = rand.Next(0, 101);
             int b = rand.Next(0, 101);
@@ -82,10 +109,10 @@ internal class Game
         }
     }
 
-    private void RunMultiplication()
+    private void RunMultiplication(int reps)
     {
         Random rand = new();
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < reps; i++)
         {
             int a = rand.Next(0, 101);
             int b = rand.Next(0, 101);
@@ -98,10 +125,10 @@ internal class Game
         }
     }
 
-    private void RunDivision()
+    private void RunDivision(int reps)
     {
         Random rand = new();
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < reps; i++)
         {
             int a = rand.Next(0, 101);
             int b = 0;
@@ -115,6 +142,30 @@ internal class Game
 
             int guess = GetGuess();
             CheckGuess(ans, guess);
+        }
+    }
+
+    private void RunRandom(int reps)
+    {
+        Random rand = new();
+        for (int i = 0; i < reps; i++)
+        {
+            int op = rand.Next(0, 4);
+            switch (op)
+            {
+                case 0:
+                    RunAddition(1);
+                    break;
+                case 1:
+                    RunSubtraction(1);
+                    break;
+                case 2:
+                    RunMultiplication(1);
+                    break;
+                default:
+                    RunDivision(1);
+                    break;
+            }
         }
     }
 
@@ -140,7 +191,6 @@ internal class Game
         {
             Console.WriteLine("Correct!");
             Correct++;
-            Console.WriteLine(Correct);
         }
         else
         {
@@ -150,6 +200,8 @@ internal class Game
 
     internal void DisplayResults()
     {
-        Console.WriteLine(Correct + " of 10 correct: " + Percentage + "%\n");
+        Console.Write(Operation + " ");
+        Console.Write(Correct + " of " + NumberOfQuestions);
+        Console.WriteLine($" correct: {Percentage:0.#}%");
     }
 }

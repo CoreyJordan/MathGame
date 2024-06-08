@@ -9,12 +9,10 @@ bool exit = false;
 while (!exit)
 {
     String mode = menu.RunMenu();
-    if (mode == "5")
+
+    if (mode == "D")
     {
-        for (int i = 0; i < games.Count; i++) {
-            Console.Write("Game " + (i + 1) + ": ");
-            games[i].DisplayResults();
-        }
+        DisplayGames();
     }
     else
     {
@@ -27,3 +25,13 @@ while (!exit)
 
 menu.DisplayOutro();
 Console.ReadLine();
+
+void DisplayGames()
+{
+    for (int i = 0; i < games.Count; i++)
+    {
+        Console.Write("Game " + (i + 1) + ": ");
+        games[i].DisplayResults();
+    }
+    Console.WriteLine();
+}
