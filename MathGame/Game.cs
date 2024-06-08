@@ -25,23 +25,28 @@ internal class Game
 
     internal bool RunGame()
     {
-
+        bool exit = false;
         switch (Mode)
         {
             case "1":
                 RunAddition();
-                return false;
+                break;
             case "2":
-                return false;
+                RunSubtraction();
+                break;
             case "3":
-                return false;
+                RunMultiplication();
+                break;
             case "4":
-                return false;
-            case "5":
-                return false;
+                RunDivision();
+                break;
             default:
-                return true;
+                exit = true;
+                break; ;
         }
+
+        DisplayResults();
+        return exit;
     }
 
     private void RunAddition()
@@ -59,9 +64,58 @@ internal class Game
             CheckGuess(ans, guess);
 
         }
-        DisplayResults();
+    }
 
+    private void RunSubtraction()
+    {
+        Random rand = new();
+        for (int i = 0; i < 10; i++)
+        {
+            int a = rand.Next(0, 101);
+            int b = rand.Next(0, 101);
+            int ans = Operations.Subtract(a, b);
 
+            Console.Write(a + " - " + b + " = ");
+
+            int guess = GetGuess();
+            CheckGuess(ans, guess);
+        }
+    }
+
+    private void RunMultiplication()
+    {
+        Random rand = new();
+        for (int i = 0; i < 10; i++)
+        {
+            int a = rand.Next(0, 101);
+            int b = rand.Next(0, 101);
+            int ans = Operations.Multiply(a, b);
+
+            Console.Write(a + " x " + b + " = ");
+
+            int guess = GetGuess();
+            CheckGuess(ans, guess);
+        }
+    }
+
+    private void RunDivision()
+    {
+        Random rand = new();
+        for (int i = 0; i < 10; i++)
+        {
+            int a = rand.Next(0, 101);
+            int b = 0;
+            while (b == 0 || a % b != 0)
+            {
+                b = rand.Next(0, 101);
+            }
+            int ans = Operations.Divide(a, b);
+
+            Console.Write(a + " / " + b + " = ");
+
+            int guess = GetGuess();
+            CheckGuess(ans, guess);
+        }
     }
 
     private int GetGuess()
@@ -86,6 +140,7 @@ internal class Game
         {
             Console.WriteLine("Correct!");
             Correct++;
+            Console.WriteLine(Correct);
         }
         else
         {
@@ -93,9 +148,8 @@ internal class Game
         }
     }
 
-    private void DisplayResults()
+    internal void DisplayResults()
     {
-        Console.WriteLine();
         Console.WriteLine(Correct + " of 10 correct: " + Percentage + "%\n");
     }
 }
